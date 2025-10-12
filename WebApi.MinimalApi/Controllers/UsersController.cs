@@ -55,4 +55,10 @@ public class UsersController : Controller
             new { userId = userEntity.Id },
             userEntity.Id);
     }
+
+    [HttpPut("{userId}")]
+    public IActionResult UpdateUser([FromRoute] Guid userId, [FromBody] UserPutDto user)
+    {
+        
+    }
 }

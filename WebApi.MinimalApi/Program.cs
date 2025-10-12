@@ -18,7 +18,8 @@ builder.Services.AddControllers(options =>
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.CreateMap<UserEntity, UserDto>()
-        .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.LastName} {src.FirstName}"));
+        .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.LastName} {src.FirstName}"))
+        .ReverseMap();
 }, new System.Reflection.Assembly[0]);
 
 builder.Services.AddSingleton<IUserRepository, InMemoryUserRepository>();

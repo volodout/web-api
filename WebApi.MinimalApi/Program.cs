@@ -31,6 +31,7 @@ builder.Services.AddAutoMapper(cfg =>
         .ReverseMap();
     cfg.CreateMap<UserPostDto, UserEntity>();
     cfg.CreateMap<UserPutDto, UserEntity>();
+    cfg.CreateMap<UserEntity, UserPatchDto>().ReverseMap();;
 }, new System.Reflection.Assembly[0]);
 
 builder.Services.AddSingleton<IUserRepository, InMemoryUserRepository>();

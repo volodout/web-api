@@ -101,30 +101,15 @@ public class UsersController : Controller
         var userEntity = userRepository.FindById(userId);
         if (userEntity is null)
             return NotFound();
-        var userPatch = new UserPatchDto
-        {
-            Login = userEntity.Login,
-            FirstName = userEntity.FirstName,
-            LastName = userEntity.LastName
-        };
-        patchDoc.ApplyTo(userPatch, ModelState);
-        if (string.IsNullOrEmpty(userPatch.Login))
-            ModelState.AddModelError("login", "login is required");
-        else if (!userPatch.Login.All(char.IsLetterOrDigit))
-            ModelState.AddModelError("login", "login must be alphanumeric");
-        if (userPatch.LastName is null || userPatch.LastName.Length == 0)
-            ModelState.AddModelError("lastName", "length of the last name must be greater than 0");
-        if (userPatch.FirstName is not null && userPatch.FirstName.Length == 0)
-            ModelState.AddModelError("firstName", "length of the first name must be greater than 0");
-        if (!ModelState.IsValid)
+        var userToPatch = mapper.Map<UserPatchDto>(userEntity);
+        patchDoc.ApplyTo(userToPatch, ModelState);
+
+        if (!TryValidateModel(userToPatch) || !ModelState.IsValid)
             return UnprocessableEntity(ModelState);
-        if (userPatch.Login != null)
-            userEntity.Login = userPatch.Login;
-        if (userPatch.FirstName != null)
-            userEntity.FirstName = userPatch.FirstName;
-        if (userPatch.LastName != null)
-            userEntity.LastName = userPatch.LastName;
+
+        mapper.Map(userToPatch, userEntity);
         userRepository.Update(userEntity);
+
         return NoContent();
     }
 

@@ -49,10 +49,12 @@ public class UsersController : Controller
         if (user == null)
             return BadRequest();
 
-        if (string.IsNullOrEmpty(user.Login))
-            ModelState.AddModelError("login", "login is required");
-        else if (!user.Login.All(char.IsLetterOrDigit))
-            ModelState.AddModelError("login", "login must be alphanumeric");
+        if (user.Login != null)
+        {
+            if (!user.Login.All(char.IsLetterOrDigit))
+                ModelState.AddModelError("login", "login must be alphanumeric");
+        }
+       
 
         if (!ModelState.IsValid)
         {
